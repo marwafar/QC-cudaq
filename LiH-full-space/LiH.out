@@ -1,0 +1,432 @@
+#INFO: **** input file is /home/cudaq/Test/qchem-cudaq/ES-full-space.py ****
+import argparse
+import numpy as np
+from numpy import linalg as LA
+import scipy
+
+from pyscf import gto, scf, mp, mcscf, fci, cc
+from pyscf import ao2mo
+from pyscf.tools import molden
+from functools import reduce
+
+from openfermion import generate_hamiltonian
+from openfermion.transforms import jordan_wigner
+
+import cudaq
+from cudaq import spin
+
+from typing import List, Tuple
+#############################
+# Parser
+#############################
+# Create the parser
+parser=argparse.ArgumentParser()
+
+# Add arguments
+parser.add_argument('xyz', help="xyz file", type=str)
+parser.add_argument('c', help="charge of the system", type=int)
+parser.add_argument('s', help="no. of unpaired electrons (2 *s)", type=int)
+parser.add_argument('basis', help="The basis set", type=str)
+
+#Parse the argument
+args=parser.parse_args()
+filename=args.xyz.split('.')[0]
+
+##################################################
+## Convert openfermion jw Hamiltonian to 
+## cudaq spin operator Hamiltonian
+##################################################
+
+def cudaq_pauli (qubit,pauli_string):
+    if pauli_string.lower() == 'x':
+        return spin.x(qubit)
+    elif pauli_string.lower() == 'y':
+        return spin.y(qubit)
+    elif pauli_string.lower() == 'z':
+        return spin.z(qubit)
+
+############
+def get_cudaq_Hamiltonian(ham_operator):
+
+    cudaq_ham=0.0
+
+    for ham_term in ham_operator:
+        for key_op,coef in ham_term.terms.items():
+            #print(key_op,coef)
+            if len(key_op):
+                temp=1.0
+                for index,pauli in key_op:
+                    #print(index,pauli)
+                    temp*=cudaq_pauli(index,pauli)
+            else:
+                temp=1.0
+
+        cudaq_ham+=coef*temp
+    return cudaq_ham
+
+
+##################################################
+# Function to initialize cudaq UCCSD parameters
+# from classical CCSD.
+###################################################
+
+def init_param_CCSD(qubits_num,nele_cas,t1,t2):
+    
+    sz=np.empty(qubits_num)
+
+    for i in range(qubits_num):
+        if i%2 == 0:
+            sz[i]=0.5
+        else:
+            sz[i]=-0.5
+
+# thetas for single excitation
+    thetas_1=[]
+# theta for double excitation
+    thetas_2=[]
+
+    tot_params=0
+    nmo_occ=nele_cas//2
+
+    for p_occ in range(nele_cas):
+        for r_vir in range(nele_cas,qubits_num):
+            if (sz[r_vir]-sz[p_occ]==0):
+                #print(p_occ,r_vir)
+                #print(p_occ//2,r_vir//2-nmo_occ)
+                thetas_1.append(t1[p_occ//2,r_vir//2-nmo_occ])
+                tot_params+=1
+
+    #print('thetas_1= ',thetas_1,'\n')
+
+    for p_occ in range(nele_cas-1):
+        for q_occ in range(p_occ+1,nele_cas):
+            for r_vir in range(nele_cas,qubits_num-1):
+                for s_vir in range(r_vir+1,qubits_num):
+                    if (sz[r_vir]+sz[s_vir]-sz[p_occ]-sz[q_occ])==0:
+                        #print(p_occ,q_occ,r_vir,s_vir)
+                        #print(p_occ//2,q_occ//2,r_vir//2-nmo_occ,s_vir//2-nmo_occ)
+                        thetas_2.append(t2[p_occ//2,q_occ//2,r_vir//2-nmo_occ,s_vir//2-nmo_occ])
+                        tot_params+=1
+
+    #print('thetas_2= ',thetas_2,'\n')
+
+    # Check that total number of parameters match the parameter_count above 
+    #print('total parameters=', tot_params, '\n')
+
+    init_params=np.concatenate((thetas_2,thetas_1), axis=0)
+    #print('init_param= ',init_params,'\n')
+
+    return init_params,tot_params
+
+
+#############################
+## Beginning of simulation
+#############################
+
+################################
+# Initialize the molecule
+################################
+mol=gto.M(
+    atom=args.xyz,
+    spin=args.s,
+    charge=args.c,
+    basis=args.basis,
+    output=filename+'.out',
+    verbose=4
+)
+
+###################################
+
+## 1- Classical preprocessing
+
+print('\n')
+print('Beginning of classical preprocessing', '\n')
+print ('Energies from classical simulations','\n')
+
+##################################
+# Mean field (HF)
+##################################
+myhf=scf.RHF(mol)
+myhf.max_cycle=100
+myhf.kernel()
+
+#nuclear_repulsion = myhf.energy_nuc()
+
+nelec = mol.nelectron
+print('Total number of electrons= ', nelec, '\n')
+norb = myhf.mo_coeff.shape[1]
+print('Total number of orbitals= ', norb, '\n')
+
+print('RHF energy= ', myhf.e_tot, '\n')
+
+######################################
+# CCSD
+######################################
+
+mycc=cc.CCSD(myhf).run()
+print('Total CCSD energy= ', mycc.e_tot, '\n')
+
+######################################
+# FCI
+######################################
+
+myfci=fci.FCI(myhf)
+result= myfci.kernel()
+print('FCI energy= ', result[0], '\n')
+
+###################################################
+## Compute electron integrals within a chosen
+## MO basis (HF basis here)
+###################################################
+
+# Compute the 1e integral in atomic orbital then convert to HF basis
+h1e_ao = mol.intor("int1e_kin") + mol.intor("int1e_nuc")
+## Ways to convert from ao to mo
+#h1e=np.einsum('pi,pq,qj->ij', myhf.mo_coeff, h1e_ao, myhf.mo_coeff)
+#h1e=reduce(np.dot, (myhf.mo_coeff.T, h1e_ao, myhf.mo_coeff))
+h1e=reduce(np.dot, (myhf.mo_coeff.conj().T, h1e_ao, myhf.mo_coeff))
+
+# Compute the 2e integrals then convert to HF basis
+h2e_ao = mol.intor("int2e_sph", aosym='1')
+h2e=ao2mo.incore.full(h2e_ao, myhf.mo_coeff)
+
+h2e=h2e.transpose(0,2,3,1)
+
+nuclear_repulsion = myhf.energy_nuc()
+
+print('h1e_shape ', h1e.shape, '\n')
+print('h2e_shape ', h2e.shape, '\n')
+
+###################################################
+## Generate the spin operator Hmiltoian for cudaq
+####################################################
+
+mol_ham=generate_hamiltonian(h1e,h2e,nuclear_repulsion)
+
+ham_operator = jordan_wigner(mol_ham)
+
+#spin_ham= get_cudaq_Hamiltonian(ham_operator)
+spin_ham=cudaq.SpinOperator(ham_operator)
+
+'''
+#########################################
+# Altherantive way to generate the spin 
+# operator Hamiltonian using the built in
+# cudaq and openfermion function.
+#########################################
+
+geometry = [('Li', (0., 0., 0.)), ('H', (0., 0., 1.5))]
+
+molecule, data = cudaq.chemistry.create_molecular_hamiltonian(geometry, 'sto-3g', 1, 0)
+
+print('Total number of orbitals (of)', data.n_orbitals)
+print('Total number of electrons (of)', data.n_electrons)
+'''
+###############################
+## 2- Quantum computing
+
+print('Beginning of quantum computing simulation','\n')
+
+##################
+
+# Define the total number of qubits.
+
+qubits_num=2*norb
+
+### Backend configuration (target=default,nvidia,nvidia-mgpu).
+cudaq.set_target("nvidia")
+
+##############################
+### Program construction
+################################
+
+# Define a quantum kernel function for
+# a parametrized quantum circuit.
+
+kernel, params=cudaq.make_kernel(list)
+
+qubits = kernel.qalloc(qubits_num)
+
+##########################################################
+## Initialize the qubits to the reference state (here is HF).
+## Occupied orbitals are "1" and virtual orbitals are "0"
+###########################################################
+for i in range(nelec):
+    kernel.x(qubits[i])
+
+###########################
+##  Ansatz: UCCSD
+###########################
+
+cudaq.kernels.uccsd(kernel, qubits, params, nelec, qubits_num)
+parameter_count = cudaq.kernels.uccsd_num_parameters(nelec,qubits_num)
+
+# Check that total parameters match with tot_param below
+print('param_count from cudaq= ,', parameter_count, '\n')
+
+# Initialize the UCCSD from the classical CCSD results
+init_params,tot_params=init_param_CCSD(qubits_num,nelec,mycc.t1,mycc.t2)
+print('param_count from my code= ,', tot_params, '\n')
+
+# Initialize (comment if use CCSD params)
+#init_params=np.zeros(tot_params)
+
+####################################################
+## Optimizer for the parameterized quantum circuit
+#####################################################
+#optimizer= cudaq.optimizers.GradientDescent()
+#optimizer = cudaq.optimizers.LBFGS()
+optimizer = cudaq.optimizers.COBYLA()
+
+optimizer.initial_parameters=init_params
+#optimizer.max_iterations=200000
+
+#print(optimizer.initial_parameters)
+
+'''
+######################################
+## Alternative way for optimization
+## Using Scipy.optimizer
+######################################
+
+# For gradient based optimizer
+gradient = cudaq.gradients.CentralDifference()
+
+def objective_function(parameter_vector: List[float], \
+                       gradient=gradient, hamiltonian=spin_ham, kernel=kernel):
+
+    get_result = lambda parameter_vector: cudaq.observe\
+        (kernel, hamiltonian, parameter_vector).expectation_z()
+    
+    cost = get_result(parameter_vector)
+    print(f"<H> = {cost}")
+    #gradient_vector = gradient.compute(parameter_vector, get_result,cost)
+
+    return cost
+    #return cost, gradient_vector
+
+
+#result_vqe=scipy.optimize.minimize(objective_function,init_params,method='L-BFGS-B', jac=True)
+result_vqe=scipy.optimize.minimize(objective_function,init_params,method='L-BFGS-B', jac='3-point')
+
+
+print('Optimizer exited successfully: ',result_vqe.success)
+print(result_vqe.message)
+print('Cudaq VQE-UCCSD energy (pyscf)= ', result_vqe.fun)
+#print(result.x)
+
+'''
+# Uncomment when using Cudaq optimizer
+###############################
+## Kernel execution: vqe
+###############################
+print('VQE energy: ')
+
+#energy_of,data=cudaq.vqe(kernel,molecule,optimizer,tot_params)
+#print('Cudaq CCSD energy (cudaq-openfermion)= ', energy_of)
+
+energy_py,data=cudaq.vqe(kernel,spin_ham,optimizer,tot_params)
+print('Cudaq CCSD energy (pyscf)= ', energy_py)
+
+########################
+# Collect final result
+#########################
+print('\n')
+print('Final result: ')
+print('RHF energy= ', myhf.e_tot)
+print('CCSD energy= ', mycc.e_tot)
+print('FCI energy= ', result[0])
+#print('Cudaq VQE-UCCSD energy (pyscf)= ', result_vqe.fun)
+#print('Cudaq VQE-UCCSD energy (cudaq-openfermion)= ', energy_of)
+print('Cudaq VQE-UCCSD energy (pyscf)= ', energy_py)
+print('Total number of qubits: ', qubits_num)
+#INFO: ******************** input file end ********************
+
+
+System: uname_result(system='Linux', node='63f85e05984c', release='5.4.0-163-generic', version='#180-Ubuntu SMP Tue Sep 5 13:21:23 UTC 2023', machine='x86_64')  Threads 128
+Python 3.10.6 (main, May 29 2023, 11:10:38) [GCC 11.3.0]
+numpy 1.25.1  scipy 1.9.3
+Date: Wed Nov  8 21:57:51 2023
+PySCF version 2.4.0
+PySCF path  /home/cudaq/.local/lib/python3.10/site-packages/pyscf
+
+[CONFIG] conf_file None
+[INPUT] verbose = 4
+[INPUT] num. atoms = 2
+[INPUT] num. electrons = 4
+[INPUT] charge = 0
+[INPUT] spin (= nelec alpha-beta = 2S) = 0
+[INPUT] symmetry False subgroup None
+[INPUT] Mole.unit = angstrom
+[INPUT] Symbol           X                Y                Z      unit          X                Y                Z       unit  Magmom
+[INPUT]  1 Li     0.000000000000   0.000000000000   0.000000000000 AA    0.000000000000   0.000000000000   0.000000000000 Bohr   0.0
+[INPUT]  2 H      0.000000000000   0.000000000000   1.500000000000 AA    0.000000000000   0.000000000000   2.834589186848 Bohr   0.0
+
+nuclear repulsion = 1.05835442184
+number of shells = 4
+number of NR pGTOs = 18
+number of NR cGTOs = 6
+basis = sto3g
+ecp = {}
+CPU time:        15.28
+
+
+******** <class 'pyscf.scf.hf.RHF'> ********
+method = RHF
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 100
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = /tmp/tmpwpr74f2u
+max_memory 4000 MB (current use 314 MB)
+Set gradient conv threshold to 3.16228e-05
+Initial guess from minao.
+init E= -7.60615132793241
+  HOMO = -0.284883831959352  LUMO = 0.0293857634958233
+cycle= 1 E= -7.85514346455025  delta_E= -0.249  |g|= 0.103  |ddm|=  1.1
+  HOMO = -0.282090269331215  LUMO = 0.0766640678123962
+cycle= 2 E= -7.86245224613964  delta_E= -0.00731  |g|= 0.0217  |ddm|= 0.234
+  HOMO = -0.297197852457069  LUMO = 0.0793379204973703
+cycle= 3 E= -7.86319158837936  delta_E= -0.000739  |g|= 0.00793  |ddm|= 0.0683
+  HOMO = -0.293519942641185  LUMO = 0.07908918104542
+cycle= 4 E= -7.86335743303134  delta_E= -0.000166  |g|= 0.00034  |ddm|= 0.0496
+  HOMO = -0.293564205633141  LUMO = 0.0789826816613969
+cycle= 5 E= -7.86335762026869  delta_E= -1.87e-07  |g|= 3.26e-05  |ddm|= 0.00177
+  HOMO = -0.29356145361264  LUMO = 0.0789920930209811
+cycle= 6 E= -7.8633576215333  delta_E= -1.26e-09  |g|= 8.35e-07  |ddm|= 0.000126
+  HOMO = -0.293561247768725  LUMO = 0.0789924348402454
+cycle= 7 E= -7.86335762153512  delta_E= -1.82e-12  |g|= 2.16e-08  |ddm|= 5.45e-06
+  HOMO = -0.293561257528436  LUMO = 0.0789924294224188
+Extra cycle  E= -7.86335762153512  delta_E= -1.78e-15  |g|= 5.97e-09  |ddm|= 5.99e-08
+converged SCF energy = -7.86335762153512
+
+******** <class 'pyscf.cc.ccsd.CCSD'> ********
+CC2 = 0
+CCSD nocc = 2, nmo = 6
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 321 MB)
+Init t2, MP2 energy = -7.87555649221752  E_corr(MP2) -0.0121988706824072
+Init E_corr(CCSD) = -0.0121988706824073
+cycle = 1  E_corr(CCSD) = -0.0162914177154342  dE = -0.00409254703  norm(t1,t2) = 0.0298579
+cycle = 2  E_corr(CCSD) = -0.0178082857658254  dE = -0.00151686805  norm(t1,t2) = 0.0134685
+cycle = 3  E_corr(CCSD) = -0.0189149681336139  dE = -0.00110668237  norm(t1,t2) = 0.00771434
+cycle = 4  E_corr(CCSD) = -0.0189877531056052  dE = -7.2784972e-05  norm(t1,t2) = 0.00340051
+cycle = 5  E_corr(CCSD) = -0.0189983265031964  dE = -1.05733976e-05  norm(t1,t2) = 0.000421025
+cycle = 6  E_corr(CCSD) = -0.018996056739202  dE = 2.26976399e-06  norm(t1,t2) = 3.75492e-05
+cycle = 7  E_corr(CCSD) = -0.0189952329272447  dE = 8.23811957e-07  norm(t1,t2) = 7.72344e-06
+cycle = 8  E_corr(CCSD) = -0.0189952876175616  dE = -5.46903169e-08  norm(t1,t2) = 6.25678e-07
+CCSD converged
+E(CCSD) = -7.882352909152679  E_corr = -0.01899528761756161
