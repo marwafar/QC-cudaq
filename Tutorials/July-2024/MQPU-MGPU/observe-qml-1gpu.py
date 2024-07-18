@@ -7,10 +7,8 @@ import timeit
 
 np.random.seed(1)
 
-cudaq.set_target("nvidia-mqpu")
-target = cudaq.get_target()
-qpu_count = target.num_qpus()
-print("Number of QPUs:", qpu_count)
+cudaq.set_target("nvidia")
+
 
 qubit_count = 10
 sample_count = 500
