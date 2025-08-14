@@ -1,0 +1,651 @@
+System: uname_result(system='Linux', node='24a4f3c52009', release='5.4.0-216-generic', version='#236-Ubuntu SMP Fri Apr 11 19:53:21 UTC 2025', machine='x86_64')  Threads 128
+Python 3.10.12 (main, May 27 2025, 17:12:29) [GCC 11.4.0]
+numpy 1.26.4  scipy 1.12.0  h5py 3.14.0
+Date: Thu Aug 14 08:30:10 2025
+PySCF version 2.10.0
+PySCF path  /home/cudaq/.local/lib/python3.10/site-packages/pyscf
+
+[CONFIG] conf_file None
+[INPUT] verbose = 4
+[INPUT] num. atoms = 4
+[INPUT] num. electrons = 10
+[INPUT] charge = 0
+[INPUT] spin (= nelec alpha-beta = 2S) = 0
+[INPUT] symmetry False subgroup None
+[INPUT] Mole.unit = angstrom
+[INPUT] Symbol           X                Y                Z      unit          X                Y                Z       unit  Magmom
+[INPUT]  1 N      0.000000000000   0.000000000000   0.000000000000 AA    0.000000000000   0.000000000000   0.000000000000 Bohr   0.0
+[INPUT]  2 H     -0.114000000000  -0.009000000000   0.990000000000 AA   -0.215428778200  -0.017007535121   1.870828863319 Bohr   0.0
+[INPUT]  3 H     -0.437000000000  -0.825000000000  -0.358000000000 AA   -0.825810316435  -1.559024052766  -0.676521952594 Bohr   0.0
+[INPUT]  4 H      0.942000000000  -0.010000000000  -0.222000000000 AA    1.780122009340  -0.018897261246  -0.419519199653 Bohr   0.0
+
+nuclear repulsion = 12.2362409330265
+number of shells = 11
+number of NR pGTOs = 34
+number of NR cGTOs = 15
+basis = 631g
+ecp = {}
+CPU time:     11566.52
+
+
+******** <class 'pyscf.solvent._attach_solvent.PolEmbedRHF'> ********
+method = PolEmbedRHF
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1402 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = False
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Initial guess from minao.
+        Running solver for induced moments.
+0        --- Norm: 0.570010982156
+1        --- Norm: 0.185391414416
+        --- Turning on DIIS. ---
+2        --- Norm: 0.070795681316
+3        --- Norm: 0.014935050591
+4        --- Norm: 0.008100968260
+5        --- Norm: 0.001291132993
+6        --- Norm: 0.000281668410
+7        --- Norm: 0.000068969715
+8        --- Norm: 0.000016620253
+9        --- Norm: 0.000003750158
+10        --- Norm: 0.000000743971
+11        --- Norm: 0.000000092961
+12        --- Norm: 0.000000019733
+13        --- Norm: 0.000000002654
+Polarizable embedding energy = -0.296551584642327
+Solvent Energy = -0.296551584642327
+init E= -56.3878671347052
+  HOMO = -0.306037767311516  LUMO = 0.171569663031897
+        Running solver for induced moments.
+0        --- Norm: 0.041735634701
+1        --- Norm: 0.006372175558
+        --- Turning on DIIS. ---
+2        --- Norm: 0.001484545720
+3        --- Norm: 0.000646273249
+4        --- Norm: 0.000171833893
+5        --- Norm: 0.000022351587
+6        --- Norm: 0.000005188383
+7        --- Norm: 0.000001144328
+8        --- Norm: 0.000000267483
+9        --- Norm: 0.000000053299
+10        --- Norm: 0.000000011744
+11        --- Norm: 0.000000001886
+Polarizable embedding energy = -0.298999011051717
+Solvent Energy = -0.298999011051717
+cycle= 1 E= -56.4474240617626  delta_E= -0.0596  |g|= 0.217  |ddm|= 1.45
+  HOMO = -0.365166607190227  LUMO = 0.241412419426897
+        Running solver for induced moments.
+0        --- Norm: 0.004710689906
+1        --- Norm: 0.000721684624
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000188638657
+3        --- Norm: 0.000072347555
+4        --- Norm: 0.000019522164
+5        --- Norm: 0.000003251593
+6        --- Norm: 0.000000573897
+7        --- Norm: 0.000000157659
+8        --- Norm: 0.000000025358
+9        --- Norm: 0.000000004450
+Polarizable embedding energy = -0.298696301057254
+Solvent Energy = -0.298696301057254
+cycle= 2 E= -56.45910045482  delta_E= -0.0117  |g|= 0.0739  |ddm|= 0.231
+  HOMO = -0.400336535289534  LUMO = 0.237295785593976
+        Running solver for induced moments.
+0        --- Norm: 0.000711805252
+1        --- Norm: 0.000109798109
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000026377884
+3        --- Norm: 0.000011127520
+4        --- Norm: 0.000001987661
+5        --- Norm: 0.000000516524
+6        --- Norm: 0.000000150007
+7        --- Norm: 0.000000035751
+8        --- Norm: 0.000000006955
+Polarizable embedding energy = -0.298736790570892
+Solvent Energy = -0.298736790570892
+cycle= 3 E= -56.4603917885163  delta_E= -0.00129  |g|= 0.0216  |ddm|= 0.0674
+  HOMO = -0.393004854428769  LUMO = 0.241004985498081
+        Running solver for induced moments.
+0        --- Norm: 0.000232177204
+1        --- Norm: 0.000032024081
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000006204549
+3        --- Norm: 0.000001386947
+4        --- Norm: 0.000000282572
+5        --- Norm: 0.000000072139
+6        --- Norm: 0.000000024838
+7        --- Norm: 0.000000006200
+Polarizable embedding energy = -0.298722218150175
+Solvent Energy = -0.298722218150175
+cycle= 4 E= -56.4605334385847  delta_E= -0.000142  |g|= 0.00308  |ddm|= 0.0251
+  HOMO = -0.393728014508791  LUMO = 0.240834263933511
+        Running solver for induced moments.
+0        --- Norm: 0.000106168457
+1        --- Norm: 0.000016577673
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000003217003
+3        --- Norm: 0.000000777047
+4        --- Norm: 0.000000194505
+5        --- Norm: 0.000000024461
+6        --- Norm: 0.000000005523
+Polarizable embedding energy = -0.298727630817449
+Solvent Energy = -0.298727630817449
+cycle= 5 E= -56.4605433547461  delta_E= -9.92e-06  |g|= 0.000824  |ddm|= 0.0115
+  HOMO = -0.39386800389406  LUMO = 0.240807586637495
+        Running solver for induced moments.
+0        --- Norm: 0.000037028284
+1        --- Norm: 0.000005815505
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000001123426
+3        --- Norm: 0.000000206277
+4        --- Norm: 0.000000055320
+5        --- Norm: 0.000000021952
+6        --- Norm: 0.000000004513
+Polarizable embedding energy = -0.29872956871476
+Solvent Energy = -0.29872956871476
+cycle= 6 E= -56.4605441425328  delta_E= -7.88e-07  |g|= 7.83e-05  |ddm|= 0.00456
+  HOMO = -0.393856503336676  LUMO = 0.240814670846929
+        Running solver for induced moments.
+0        --- Norm: 0.000002635858
+1        --- Norm: 0.000000366552
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000000100155
+3        --- Norm: 0.000000042621
+4        --- Norm: 0.000000007479
+Polarizable embedding energy = -0.298729723583275
+Solvent Energy = -0.298729723583275
+cycle= 7 E= -56.4605441460018  delta_E= -3.47e-09  |g|= 8.32e-06  |ddm|= 0.000322
+  HOMO = -0.393853682314122  LUMO = 0.240815631782078
+        Running solver for induced moments.
+0        --- Norm: 0.000000358081
+1        --- Norm: 0.000000052108
+        --- Turning on DIIS. ---
+2        --- Norm: 0.000000009015
+Polarizable embedding energy = -0.298729738872039
+Solvent Energy = -0.298729738872039
+cycle= 8 E= -56.4605441460131  delta_E= -1.12e-11  |g|= 1.38e-06  |ddm|= 1.76e-05
+  HOMO = -0.393853894449532  LUMO = 0.240815497230678
+        Running solver for induced moments.
+0        --- Norm: 0.000000041838
+1        --- Norm: 0.000000006277
+Polarizable embedding energy = -0.298729739730472
+Solvent Energy = -0.298729739730472
+Extra cycle  E= -56.4605441460957  delta_E= -8.27e-11  |g|= 5.91e-07  |ddm|= 2.42e-06
+converged SCF energy = -56.4605441460957
+Set <class 'pyscf.cc.ccsd.CCSD'> as a scanner
+Create scanner for <class 'pyscf.solvent._attach_solvent.PolEmbedRHF'>
+Create scanner for <class 'pyscf.solvent._attach_solvent.PolEmbedRHF'>
+
+** Self-consistently update the solvent effects for PolEmbedCCSD **
+
+** Solvent self-consistent cycle 0:
+
+
+******** <class 'pyscf.scf.hf.PolEmbedRHF_Scanner'> ********
+method = PolEmbedRHF_Scanner
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1404 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = True
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Solvent Energy = -0.298729739730472
+init E= -56.4605441460957
+  HOMO = -0.393853697557178  LUMO = 0.240815524957229
+Solvent Energy = -0.298729739730472
+cycle= 1 E= -56.4605441463344  delta_E= -2.39e-10  |g|= 2.73e-07  |ddm|= 1.1e-06
+  HOMO = -0.393853779385618  LUMO = 0.24081550072344
+Solvent Energy = -0.298729739730472
+Extra cycle  E= -56.4605441462353  delta_E= 9.91e-11  |g|= 1.32e-07  |ddm|= 5.12e-07
+converged SCF energy = -56.4605441462353
+
+******** <class 'pyscf.cc.ccsd.CCSD_Scanner'> ********
+CC2 = 0
+CCSD nocc = 3, nmo = 6
+frozen orbitals [0, 1, 8, 9, 10, 11, 12, 13, 14]
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 1404 MB)
+Init t2, MP2 energy = -56.4682885556865  E_corr(MP2) -0.00774440945111643
+Init E_corr(CCSD_Scanner) = -0.0077444094511204
+cycle = 1  E_corr(CCSD_Scanner) = -0.00921677581438867  dE = -0.00147236636  norm(t1,t2) = 0.0128225
+cycle = 2  E_corr(CCSD_Scanner) = -0.00960233585436724  dE = -0.00038556004  norm(t1,t2) = 0.00436225
+cycle = 3  E_corr(CCSD_Scanner) = -0.009785274235059  dE = -0.000182938381  norm(t1,t2) = 0.00167025
+cycle = 4  E_corr(CCSD_Scanner) = -0.00978121381308365  dE = 4.06042198e-06  norm(t1,t2) = 0.000362076
+cycle = 5  E_corr(CCSD_Scanner) = -0.00978232853732326  dE = -1.11472424e-06  norm(t1,t2) = 2.47786e-05
+cycle = 6  E_corr(CCSD_Scanner) = -0.00978230909052139  dE = 1.94468019e-08  norm(t1,t2) = 2.939e-06
+CCSD_Scanner converged
+E(CCSD_Scanner) = -56.47032645532586  E_corr = -0.009782309090521388
+cycle = 1  norm(lambda1,lambda2) = 0.00190723
+cycle = 2  norm(lambda1,lambda2) = 0.000502564
+cycle = 3  norm(lambda1,lambda2) = 0.000181498
+cycle = 4  norm(lambda1,lambda2) = 4.14721e-05
+cycle = 5  norm(lambda1,lambda2) = 6.32429e-06
+        Running solver for induced moments.
+0        --- Norm: 0.541179025960
+1        --- Norm: 0.192071837733
+        --- Turning on DIIS. ---
+2        --- Norm: 0.085577091144
+3        --- Norm: 0.014825642984
+4        --- Norm: 0.005007376547
+5        --- Norm: 0.000802656522
+6        --- Norm: 0.000220808288
+7        --- Norm: 0.000025422714
+8        --- Norm: 0.000004536849
+9        --- Norm: 0.000001054536
+10        --- Norm: 0.000000204246
+11        --- Norm: 0.000000032447
+12        --- Norm: 0.000000006222
+Polarizable embedding energy = -0.298636998457655
+Solvent cycle 0  E_tot = -56.4703264553259  dE = -56.4703
+
+** Solvent self-consistent cycle 1:
+
+
+******** <class 'pyscf.scf.hf.PolEmbedRHF_Scanner'> ********
+method = PolEmbedRHF_Scanner
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1404 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = True
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Solvent Energy = -0.298636998457655
+init E= -56.4604514049625
+  HOMO = -0.393846489404338  LUMO = 0.240804971967718
+Solvent Energy = -0.298636998457655
+cycle= 1 E= -56.4604514976655  delta_E= -9.27e-08  |g|= 8.92e-06  |ddm|= 4.77e-05
+  HOMO = -0.393850791366949  LUMO = 0.240804602313407
+Solvent Energy = -0.298636998457655
+cycle= 2 E= -56.4604515165694  delta_E= -1.89e-08  |g|= 3.25e-06  |ddm|= 1.61e-05
+  HOMO = -0.393849852493036  LUMO = 0.240804949998271
+Solvent Energy = -0.298636998457655
+cycle= 3 E= -56.4604515257255  delta_E= -9.16e-09  |g|= 1.6e-06  |ddm|= 7.16e-06
+  HOMO = -0.393850535230587  LUMO = 0.240804861335017
+Solvent Energy = -0.298636998457655
+cycle= 4 E= -56.4604515296455  delta_E= -3.92e-09  |g|= 2.29e-07  |ddm|= 4.91e-06
+  HOMO = -0.393850497756944  LUMO = 0.24080486053428
+Solvent Energy = -0.298636998457655
+cycle= 5 E= -56.460451530086  delta_E= -4.41e-10  |g|= 4.89e-08  |ddm|= 1.29e-06
+  HOMO = -0.393850490318583  LUMO = 0.240804861806389
+Solvent Energy = -0.298636998457655
+Extra cycle  E= -56.4604515301082  delta_E= -2.22e-11  |g|= 2.23e-08  |ddm|= 1e-07
+converged SCF energy = -56.4604515301082
+
+******** <class 'pyscf.cc.ccsd.CCSD_Scanner'> ********
+CC2 = 0
+CCSD nocc = 3, nmo = 6
+frozen orbitals [0, 1, 8, 9, 10, 11, 12, 13, 14]
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 1404 MB)
+Init E_corr(CCSD_Scanner) = -0.00978245077193229
+cycle = 1  E_corr(CCSD_Scanner) = -0.00978264544673179  dE = -1.94674799e-07  norm(t1,t2) = 7.80847e-06
+cycle = 2  E_corr(CCSD_Scanner) = -0.00978268278762072  dE = -3.73408889e-08  norm(t1,t2) = 2.24202e-06
+CCSD_Scanner converged
+E(CCSD_Scanner) = -56.47023421289582  E_corr = -0.009782682787620721
+        Running solver for induced moments.
+0        --- Norm: 0.543516772713
+1        --- Norm: 0.211304288992
+        --- Turning on DIIS. ---
+2        --- Norm: 0.077636806418
+3        --- Norm: 0.009262370577
+4        --- Norm: 0.001964420096
+5        --- Norm: 0.000698706196
+6        --- Norm: 0.000082901339
+7        --- Norm: 0.000017008865
+8        --- Norm: 0.000002791325
+9        --- Norm: 0.000000432720
+10        --- Norm: 0.000000102689
+11        --- Norm: 0.000000021275
+12        --- Norm: 0.000000003145
+Polarizable embedding energy = -0.2986368717436
+Solvent cycle 1  E_tot = -56.4702342128958  dE = 9.22424e-05
+
+** Solvent self-consistent cycle 2:
+
+
+******** <class 'pyscf.scf.hf.PolEmbedRHF_Scanner'> ********
+method = PolEmbedRHF_Scanner
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1404 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = True
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Solvent Energy = -0.2986368717436
+init E= -56.4604514033941
+  HOMO = -0.393850473929673  LUMO = 0.240804846126289
+Solvent Energy = -0.2986368717436
+cycle= 1 E= -56.4604514034821  delta_E= -8.8e-11  |g|= 1.95e-08  |ddm|= 1.01e-07
+  HOMO = -0.393850479340763  LUMO = 0.240804845691773
+Solvent Energy = -0.2986368717436
+Extra cycle  E= -56.4604514035013  delta_E= -1.92e-11  |g|= 8.23e-09  |ddm|= 4.67e-08
+converged SCF energy = -56.4604514035013
+
+******** <class 'pyscf.cc.ccsd.CCSD_Scanner'> ********
+CC2 = 0
+CCSD nocc = 3, nmo = 6
+frozen orbitals [0, 1, 8, 9, 10, 11, 12, 13, 14]
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 1404 MB)
+Init E_corr(CCSD_Scanner) = -0.0097826830527705
+cycle = 1  E_corr(CCSD_Scanner) = -0.0097826947755804  dE = -1.17228099e-08  norm(t1,t2) = 8.10868e-07
+CCSD_Scanner converged
+E(CCSD_Scanner) = -56.47023409827687  E_corr = -0.009782694775580398
+        Running solver for induced moments.
+0        --- Norm: 0.563971055785
+1        --- Norm: 0.195564977774
+        --- Turning on DIIS. ---
+2        --- Norm: 0.077190519206
+3        --- Norm: 0.014300944353
+4        --- Norm: 0.003635143447
+5        --- Norm: 0.001144721830
+6        --- Norm: 0.000363886607
+7        --- Norm: 0.000080882429
+8        --- Norm: 0.000031062999
+9        --- Norm: 0.000006761954
+10        --- Norm: 0.000001126616
+11        --- Norm: 0.000000213189
+12        --- Norm: 0.000000055071
+13        --- Norm: 0.000000013174
+14        --- Norm: 0.000000000444
+Polarizable embedding energy = -0.298636871127497
+Solvent cycle 2  E_tot = -56.4702340982769  dE = 1.14619e-07
+
+** Solvent self-consistent cycle 3:
+
+
+******** <class 'pyscf.scf.hf.PolEmbedRHF_Scanner'> ********
+method = PolEmbedRHF_Scanner
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1404 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = True
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Solvent Energy = -0.298636871127497
+init E= -56.4604514028852
+  HOMO = -0.393850476884251  LUMO = 0.2408048462392
+Solvent Energy = -0.298636871127497
+cycle= 1 E= -56.4604514028983  delta_E= -1.31e-11  |g|= 4.37e-09  |ddm|= 2.46e-08
+  HOMO = -0.393850478067617  LUMO = 0.240804845988522
+Solvent Energy = -0.298636871127497
+Extra cycle  E= -56.4604514029008  delta_E= -2.52e-12  |g|= 2e-09  |ddm|= 1.17e-08
+converged SCF energy = -56.4604514029008
+
+******** <class 'pyscf.cc.ccsd.CCSD_Scanner'> ********
+CC2 = 0
+CCSD nocc = 3, nmo = 6
+frozen orbitals [0, 1, 8, 9, 10, 11, 12, 13, 14]
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 1404 MB)
+Init E_corr(CCSD_Scanner) = -0.00978269476743829
+cycle = 1  E_corr(CCSD_Scanner) = -0.00978269926513534  dE = -4.49769705e-09  norm(t1,t2) = 3.23038e-07
+CCSD_Scanner converged
+E(CCSD_Scanner) = -56.47023410216596  E_corr = -0.009782699265135338
+        Running solver for induced moments.
+0        --- Norm: 0.550139511100
+1        --- Norm: 0.192208986292
+        --- Turning on DIIS. ---
+2        --- Norm: 0.078032013432
+3        --- Norm: 0.009455383580
+4        --- Norm: 0.003735047703
+5        --- Norm: 0.000402177507
+6        --- Norm: 0.000096864655
+7        --- Norm: 0.000014081818
+8        --- Norm: 0.000002530141
+9        --- Norm: 0.000000465180
+10        --- Norm: 0.000000066384
+11        --- Norm: 0.000000009768
+Polarizable embedding energy = -0.298636870988558
+Solvent cycle 3  E_tot = -56.470234102166  dE = -3.88909e-09
+
+** Extra cycle for solvent effects
+
+
+******** <class 'pyscf.scf.hf.PolEmbedRHF_Scanner'> ********
+method = PolEmbedRHF_Scanner
+initial guess = minao
+damping factor = 0
+level_shift factor = 0
+DIIS = <class 'pyscf.scf.diis.CDIIS'>
+diis_start_cycle = 1
+diis_space = 8
+diis_damp = 0
+SCF conv_tol = 1e-09
+SCF conv_tol_grad = None
+SCF max_cycles = 50
+direct_scf = True
+direct_scf_tol = 1e-13
+chkfile to save SCF result = qchem/NH3-pyscf.chk
+max_memory 4000 MB (current use 1404 MB)
+******** <class 'pyscf.solvent.pol_embed.PolEmbed'> flags ********
+frozen = True
+equilibrium_solvation = False
+pe(ecp) repulsive potentials = False
+cppe.potfile = qchem/46_water.pot
+cppe.iso_pol = False
+cppe.induced_thresh = 1e-08
+cppe.maxiter = 50
+cppe.damp_induced = False
+cppe.damping_factor_induced = 2.1304
+cppe.damp_multipole = False
+cppe.damping_factor_multipole = 2.1304
+cppe.summation_induced_fields = direct
+cppe.tree_expansion_order = 5
+cppe.tree_ncrit = 64
+cppe.theta = 0.5
+cppe.pe_border = False
+cppe.border_type = remove
+cppe.border_rmin = 2.2
+cppe.border_nredist = -1
+cppe.border_redist_order = 1
+cppe.border_redist_pol = False
+Set gradient conv threshold to 3.16228e-05
+Solvent Energy = -0.298636870988558
+init E= -56.4604514027619
+  HOMO = -0.393850477303852  LUMO = 0.240804846100131
+Solvent Energy = -0.298636870988558
+cycle= 1 E= -56.4604514027649  delta_E= -3.03e-12  |g|= 1.09e-09  |ddm|= 5.98e-09
+  HOMO = -0.393850477619015  LUMO = 0.240804846027635
+Solvent Energy = -0.298636870988558
+Extra cycle  E= -56.4604514027654  delta_E= -5.26e-13  |g|= 5.07e-10  |ddm|= 2.81e-09
+converged SCF energy = -56.4604514027654
+
+******** <class 'pyscf.cc.ccsd.CCSD_Scanner'> ********
+CC2 = 0
+CCSD nocc = 3, nmo = 6
+frozen orbitals [0, 1, 8, 9, 10, 11, 12, 13, 14]
+max_cycle = 50
+direct = 0
+conv_tol = 1e-07
+conv_tol_normt = 1e-05
+diis_space = 6
+diis_start_cycle = 0
+diis_start_energy_diff = 1e+09
+max_memory 4000 MB (current use 1404 MB)
+Init E_corr(CCSD_Scanner) = -0.00978269926245211
+cycle = 1  E_corr(CCSD_Scanner) = -0.00978270116361897  dE = -1.90116686e-09  norm(t1,t2) = 1.50125e-07
+CCSD_Scanner converged
+E(CCSD_Scanner) = -56.47023410392905  E_corr = -0.00978270116361897
+PolEmbedCCSD converged
+E(PolEmbedCCSD) = -56.47023410392905  E_corr = -0.00978270116361897
